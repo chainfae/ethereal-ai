@@ -382,136 +382,51 @@
 
   <template id="page-receipts">
     <main class="px-6 max-w-2xl mx-auto space-y-10">
-      <!-- Weekly Trends -->
+      <!-- Header -->
       <section class="space-y-4">
         <div class="flex justify-between items-end">
           <div>
-            <span class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Weekly Overview</span>
-            <h2 class="font-headline text-2xl font-extrabold tracking-tight text-primary-fixed-dim">$1,248.50</h2>
+            <span class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Receipt Tracker</span>
+            <h2 id="receipt-total" class="font-headline text-2xl font-extrabold tracking-tight text-primary-fixed-dim">Receipts</h2>
           </div>
           <div class="flex items-center gap-2 bg-secondary-container/10 px-3 py-1 rounded-full">
             <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
-            <span class="font-label text-xs font-medium text-secondary-fixed-dim uppercase tracking-tighter">AI Analysis Active</span>
-          </div>
-        </div>
-        <div class="h-32 w-full flex items-end justify-between gap-2 px-2">
-          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[40%]">
-            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[65%]">
-            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[35%]">
-            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[90%]">
-            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[55%]">
-            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[70%]">
-            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-          <div class="flex-1 bg-primary rounded-t-lg relative h-[100%] shadow-[0_-4px_12px_rgba(176,198,255,0.3)]">
-            <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary">Today</div>
+            <span class="font-label text-xs font-medium text-secondary-fixed-dim uppercase tracking-tighter">Live</span>
           </div>
         </div>
       </section>
-      <!-- Capture Button -->
-      <section>
-        <button class="w-full py-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-lg flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,44,109,0.2)] active:scale-95 transition-transform duration-200">
-          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
-          Capture New Receipt
-        </button>
+      <!-- How to add receipts -->
+      <section class="glass-panel border border-primary/10 rounded-[2rem] p-6">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 flex-shrink-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20">
+            <span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+          </div>
+          <div class="space-y-2">
+            <h5 class="font-headline font-bold text-on-surface">Text Your Receipts</h5>
+            <p class="font-body text-sm text-on-surface-variant leading-relaxed">
+              Send a photo of any receipt to <span class="text-primary font-semibold">+1 (478) 280-9442</span> and it will automatically appear here.
+            </p>
+            <a href="sms:+14782809442" class="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-[11px] font-bold uppercase tracking-wider text-primary hover:bg-primary/20 transition-colors">
+              <span class="material-symbols-outlined text-sm">sms</span>
+              Send Now
+            </a>
+          </div>
+        </div>
       </section>
       <!-- Receipt List -->
       <section class="space-y-6">
         <div class="flex justify-between items-center">
-          <h3 class="font-headline text-lg font-bold tracking-tight">Recent Activity</h3>
-          <span class="font-label text-xs text-outline hover:text-primary transition-colors cursor-pointer">View All</span>
+          <h3 class="font-headline text-lg font-bold tracking-tight">Received Receipts</h3>
+          <span id="receipt-count" class="font-label text-xs text-outline">--</span>
         </div>
-        <div class="space-y-4" id="receipt-list">
-          <!-- Pending -->
-          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
-            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary-fixed-dim">
-              <span class="material-symbols-outlined">receipt_long</span>
+        <div id="receipt-list" class="space-y-4">
+          <!-- Empty state shown by default -->
+          <div id="receipt-empty" class="py-16 flex flex-col items-center justify-center text-center">
+            <div class="w-20 h-20 rounded-full bg-surface-container-low flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-4xl text-outline/40">receipt_long</span>
             </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="font-headline font-bold text-on-surface">Blue Bottle Coffee</h4>
-                <span class="font-headline font-extrabold text-on-surface">$12.45</span>
-              </div>
-              <div class="flex items-center gap-2 mt-1">
-                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 24, 2023</span>
-                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
-                <div class="flex items-center gap-1 text-secondary-fixed-dim">
-                  <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
-                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Pending AI Review</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Approved -->
-          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
-            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
-              <span class="material-symbols-outlined">shopping_bag</span>
-            </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="font-headline font-bold text-on-surface">Apple Store</h4>
-                <span class="font-headline font-extrabold text-on-surface">$199.00</span>
-              </div>
-              <div class="flex items-center gap-2 mt-1">
-                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 23, 2023</span>
-                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
-                <div class="flex items-center gap-1 text-[#4ade80]">
-                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Approved</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Flagged -->
-          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
-            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-error">
-              <span class="material-symbols-outlined">restaurant</span>
-            </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="font-headline font-bold text-on-surface">The Night Owl Bistro</h4>
-                <span class="font-headline font-extrabold text-on-surface">$84.20</span>
-              </div>
-              <div class="flex items-center gap-2 mt-1">
-                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 22, 2023</span>
-                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
-                <div class="flex items-center gap-1 text-error">
-                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">report</span>
-                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Flagged</span>
-                </div>
-              </div>
-            </div>
-            <span class="material-symbols-outlined text-outline/40">chevron_right</span>
-          </div>
-          <!-- Approved 2 -->
-          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
-            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-secondary-fixed">
-              <span class="material-symbols-outlined">local_gas_station</span>
-            </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="font-headline font-bold text-on-surface">Shell Station</h4>
-                <span class="font-headline font-extrabold text-on-surface">$56.00</span>
-              </div>
-              <div class="flex items-center gap-2 mt-1">
-                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 21, 2023</span>
-                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
-                <div class="flex items-center gap-1 text-[#4ade80]">
-                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Approved</span>
-                </div>
-              </div>
-            </div>
+            <h4 class="font-headline font-bold text-on-surface mb-2">No receipts yet</h4>
+            <p class="text-sm text-on-surface-variant max-w-[260px]">Text a photo of a receipt to <span class="text-primary font-semibold">+1 (478) 280-9442</span> to get started</p>
           </div>
         </div>
       </section>
@@ -718,6 +633,7 @@
 
         // Load live data after render
         if (page === 'home') this.loadHome();
+        if (page === 'receipts') this.loadReceipts();
         if (page === 'calls') this.loadCalls();
         if (page === 'messages') this.loadMessages();
       },
@@ -886,6 +802,52 @@
               </div>`;
           }
         }
+      },
+
+      async loadReceipts() {
+        const data = await api.fetch('receipts');
+        const list = document.getElementById('receipt-list');
+        const countEl = document.getElementById('receipt-count');
+        const totalEl = document.getElementById('receipt-total');
+        if (!list || !data) return;
+
+        const receipts = data.receipts || [];
+        if (countEl) countEl.textContent = `${receipts.length} receipt${receipts.length !== 1 ? 's' : ''}`;
+        if (totalEl) totalEl.textContent = receipts.length > 0 ? `${receipts.length} Receipt${receipts.length !== 1 ? 's' : ''}` : 'Receipts';
+
+        if (receipts.length === 0) return; // keep empty state
+
+        list.innerHTML = receipts.map(r => {
+          const hasImage = r.mediaUrls && r.mediaUrls.length > 0;
+          const imageUrl = hasImage ? r.mediaUrls[0].url : '';
+          const note = r.body || 'Receipt image';
+          return `
+            <div class="glass-card rounded-xl border border-outline/10 overflow-hidden">
+              ${hasImage ? `
+                <div class="w-full h-48 bg-surface-container-high relative overflow-hidden">
+                  <img src="${imageUrl}" alt="Receipt" class="w-full h-full object-cover" crossorigin="anonymous" />
+                  <div class="absolute top-3 right-3 bg-[#131313]/70 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
+                    <span class="material-symbols-outlined text-secondary-fixed-dim text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    <span class="text-[10px] font-bold text-secondary-fixed-dim uppercase">Captured</span>
+                  </div>
+                </div>
+              ` : ''}
+              <div class="p-4 flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary-fixed-dim">
+                  <span class="material-symbols-outlined">${hasImage ? 'image' : 'receipt_long'}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-on-surface truncate">${helpers.truncate(note, 50)}</p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="font-label text-[10px] text-on-surface-variant">${helpers.timeAgo(r.dateSent)}</span>
+                    <span class="w-1 h-1 rounded-full bg-outline/30"></span>
+                    <span class="font-label text-[10px] text-on-surface-variant">From: ${helpers.formatPhone(r.from)}</span>
+                  </div>
+                </div>
+                ${r.numMedia > 1 ? `<span class="text-[10px] font-bold text-primary bg-primary-container/20 px-2 py-1 rounded-md">${r.numMedia} imgs</span>` : ''}
+              </div>
+            </div>`;
+        }).join('');
       },
 
       async loadMessages() {
