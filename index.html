@@ -120,7 +120,7 @@
 <body class="min-h-screen">
 
   <!-- Login Screen (shown first if not logged in) -->
-  <div id="login-screen" class="hidden min-h-screen flex flex-col items-center justify-center p-6">
+  <div id="login-screen" style="display:none" class="min-h-screen items-center justify-center p-6">
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
       <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px]"></div>
       <div class="absolute top-[20%] -right-[5%] w-[30%] h-[30%] bg-tertiary/5 rounded-full blur-[100px]"></div>
@@ -197,7 +197,7 @@
   </div>
 
   <!-- App Shell (shown after login) -->
-  <div id="app-shell" class="hidden">
+  <div id="app-shell" style="display:none">
     <!-- TopAppBar -->
     <header id="top-bar" class="fixed top-0 w-full z-50 bg-[#131313] shadow-[0_32px_32px_rgba(0,44,109,0.08)]">
       <div class="flex items-center justify-between px-6 h-16 w-full max-w-2xl mx-auto">
@@ -820,10 +820,16 @@
         }
 
         // Login handler
-        document.getElementById('login-btn').addEventListener('click', () => this.handleLogin());
-        document.getElementById('login-password').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') this.handleLogin();
+        document.getElementById('login-btn').addEventListener('click', (e) => { e.preventDefault(); this.handleLogin(); });
+        document.getElementById('login-email').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); this.handleLogin(); }
         });
+        document.getElementById('login-password').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); this.handleLogin(); }
+        });
+
+        // Create account -> same as login for demo
+        document.getElementById('create-account-link').addEventListener('click', (e) => { e.preventDefault(); this.handleLogin(); });
 
         // Nav tabs
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -865,15 +871,13 @@
       },
 
       showLogin() {
-        document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('login-screen').classList.add('flex');
-        document.getElementById('app-shell').classList.add('hidden');
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('app-shell').style.display = 'none';
       },
 
       showApp() {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('flex');
-        document.getElementById('app-shell').classList.remove('hidden');
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-shell').style.display = 'block';
 
         // Route from URL hash or default to home
         const hash = window.location.hash.replace('#/', '').replace('#', '');
