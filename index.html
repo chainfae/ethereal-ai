@@ -276,30 +276,12 @@
               <span class="text-[10px] text-on-surface-variant font-medium">Critical Tasks</span>
             </div>
           </div>
-          <div class="space-y-3">
-            <div class="glass-panel rounded-xl p-4 flex items-center justify-between border border-outline/10 group active:scale-[0.98] transition-all cursor-pointer" onclick="app.navigate('messages')">
+          <div class="space-y-3" id="approval-list">
+            <div class="glass-panel rounded-xl p-4 flex items-center justify-between border border-outline/10 animate-pulse">
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
-                  <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
-                </div>
-                <div>
-                  <p class="text-sm font-semibold text-on-surface">Reschedule Design Sync</p>
-                  <p class="text-[11px] text-on-surface-variant">From: Sarah Miller - Email</p>
-                </div>
+                <div class="w-10 h-10 rounded-lg bg-surface-container-high"></div>
+                <div><div class="h-3 w-32 bg-surface-container-high rounded"></div><div class="h-2 w-24 bg-surface-container-high rounded mt-2"></div></div>
               </div>
-              <span class="material-symbols-outlined text-primary text-lg">chevron_right</span>
-            </div>
-            <div class="glass-panel rounded-xl p-4 flex items-center justify-between border border-outline/10 group active:scale-[0.98] transition-all cursor-pointer" onclick="app.navigate('messages')">
-              <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
-                  <span class="material-symbols-outlined text-on-surface-variant">description</span>
-                </div>
-                <div>
-                  <p class="text-sm font-semibold text-on-surface">Approve Q4 Projections</p>
-                  <p class="text-[11px] text-on-surface-variant">From: Finance Dept - Attachment</p>
-                </div>
-              </div>
-              <span class="material-symbols-outlined text-primary text-lg">chevron_right</span>
             </div>
           </div>
           <button class="w-full mt-6 py-3 rounded-xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-white font-label text-xs font-bold uppercase tracking-widest shadow-lg shadow-primary-container/20 active:scale-95 duration-200" onclick="app.navigate('messages')">
@@ -333,7 +315,7 @@
           </div>
         </div>
         <!-- Retell AI Calls Card -->
-        <div class="bg-surface-container-low rounded-[1.5rem] p-5 flex flex-col justify-between border border-outline/5 cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('calls')">
+        <div id="retell-summary" class="bg-surface-container-low rounded-[1.5rem] p-5 flex flex-col justify-between border border-outline/5 cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('calls')">
           <div>
             <div class="flex justify-between items-start mb-4">
               <div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center">
@@ -341,20 +323,8 @@
               </div>
               <span class="text-[10px] font-bold text-tertiary uppercase bg-tertiary-container/20 px-2 py-0.5 rounded-full">Retell AI</span>
             </div>
-            <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Recent Calls</span>
-            <div class="mt-3 space-y-2">
-              <div class="flex items-center gap-2">
-                <div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
-                <p class="text-[11px] font-medium text-on-surface truncate">Inbound: Client Inquiry</p>
-              </div>
-              <div class="flex items-center gap-2 opacity-50">
-                <div class="w-1.5 h-1.5 rounded-full bg-outline"></div>
-                <p class="text-[11px] font-medium text-on-surface truncate">Outbound: Vendor Check</p>
-              </div>
-            </div>
-          </div>
-          <div class="mt-4 pt-4 border-t border-outline/10">
-            <p class="text-[10px] text-on-surface-variant leading-tight">Total talk time today:<br/><span class="text-on-surface font-bold">14m 32s</span></p>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Loading calls...</span>
+            <div class="mt-3 animate-pulse"><div class="h-2 w-24 bg-surface-container-high rounded mb-2"></div><div class="h-2 w-20 bg-surface-container-high rounded"></div></div>
           </div>
         </div>
         <!-- Twilio Messages (Span 2) -->
@@ -379,12 +349,10 @@
               <div class="w-8 h-8 rounded-full border-2 border-surface-container-low bg-surface-container-high flex items-center justify-center text-[10px] font-bold text-on-surface">+3</div>
             </div>
           </div>
-          <div class="flex items-center gap-4 bg-surface-container-lowest/50 p-4 rounded-2xl border border-outline/5">
-            <div class="flex-1">
-              <p class="text-xs font-semibold text-on-surface">Project Apollo Update</p>
-              <p class="text-[11px] text-on-surface-variant truncate">The automated workflow has been triggered...</p>
+          <div id="twilio-feed">
+            <div class="flex items-center gap-4 bg-surface-container-lowest/50 p-4 rounded-2xl border border-outline/5 animate-pulse">
+              <div class="flex-1"><div class="h-3 w-32 bg-surface-container-high rounded mb-2"></div><div class="h-2 w-48 bg-surface-container-high rounded"></div></div>
             </div>
-            <span class="text-[10px] font-bold text-primary uppercase bg-primary-container/20 px-2 py-1 rounded-md">New</span>
           </div>
         </div>
       </section>
@@ -398,8 +366,8 @@
             </div>
             <div class="space-y-3">
               <h5 class="font-headline font-bold text-on-surface">AI Morning Briefing</h5>
-              <p class="font-body text-sm text-on-surface-variant leading-relaxed">
-                You have a busy morning. I've successfully reconciled <span class="text-primary font-semibold">8 expenses</span> and drafted replies to <span class="text-primary font-semibold">3 high-priority</span> emails from the Design Sync thread. Shall I finalize the Retell summary for your 10 AM?
+              <p id="ai-briefing" class="font-body text-sm text-on-surface-variant leading-relaxed">
+                Loading your briefing...
               </p>
               <div class="flex gap-2 pt-2">
                 <button class="px-4 py-2 rounded-full border border-outline/20 text-[11px] font-bold uppercase tracking-wider text-on-surface hover:bg-surface-container-high transition-colors">Not now</button>
@@ -556,133 +524,17 @@
         <p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-semibold mb-2">Voice Agent Intelligence</p>
         <h2 class="font-headline text-3xl font-extrabold tracking-tight text-on-surface">Retell Call Analytics</h2>
       </div>
-      <div class="space-y-6">
-        <!-- Log 1: Resolved -->
-        <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
-                <span class="material-symbols-outlined">call_made</span>
-              </div>
-              <div>
-                <h3 class="font-headline font-bold text-on-surface">Sarah Jenkins</h3>
-                <p class="text-xs text-on-surface-variant font-medium">Outbound - 4m 12s</p>
-              </div>
-            </div>
-            <div class="bg-secondary-container/10 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[14px] text-secondary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-              <span class="text-[10px] font-bold text-secondary-fixed-dim uppercase tracking-wider">Resolved</span>
-            </div>
-          </div>
-          <div class="space-y-4">
-            <div class="p-4 bg-surface-container-high rounded-lg">
-              <p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-2">AI Summary</p>
-              <p class="text-sm text-on-surface leading-relaxed">Agent successfully rescheduled the quarterly review to Oct 14th at 2:00 PM. No further action needed.</p>
-            </div>
-            <div class="flex gap-2">
-              <button class="flex-1 py-3 bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-transform active:scale-95">View Details</button>
-              <button class="px-4 py-3 bg-surface-container-highest/50 text-on-surface-variant rounded-xl transition-colors hover:bg-surface-container-highest">
-                <span class="material-symbols-outlined text-sm">transcribe</span>
-              </button>
-            </div>
-          </div>
+      <div id="call-log-list" class="space-y-6">
+        <div class="bg-surface-container-low rounded-xl p-6 animate-pulse"><div class="h-4 w-40 bg-surface-container-high rounded mb-3"></div><div class="h-3 w-full bg-surface-container-high rounded mb-2"></div><div class="h-3 w-3/4 bg-surface-container-high rounded"></div></div>
+        <div class="bg-surface-container-low rounded-xl p-6 animate-pulse"><div class="h-4 w-32 bg-surface-container-high rounded mb-3"></div><div class="h-3 w-full bg-surface-container-high rounded mb-2"></div><div class="h-3 w-2/3 bg-surface-container-high rounded"></div></div>
+      </div>
+      <!-- Transcript Spotlight -->
+      <div class="bg-surface-container-low rounded-[2rem] p-6 mt-6 overflow-hidden relative">
+        <div class="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
+          <span class="material-symbols-outlined text-[120px] text-primary">forum</span>
         </div>
-        <!-- Log 2: Action Needed -->
-        <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden border-l-4 border-error/30">
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">
-                <span class="material-symbols-outlined">call_received</span>
-              </div>
-              <div>
-                <h3 class="font-headline font-bold text-on-surface">+1 (555) 012-9843</h3>
-                <p class="text-xs text-on-surface-variant font-medium">Inbound - 1m 45s</p>
-              </div>
-            </div>
-            <div class="bg-error-container/20 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[14px] text-error" style="font-variation-settings: 'FILL' 1;">error</span>
-              <span class="text-[10px] font-bold text-error uppercase tracking-wider">Action Needed</span>
-            </div>
-          </div>
-          <div class="space-y-4">
-            <div class="p-4 bg-surface-container-high rounded-lg">
-              <p class="text-[10px] uppercase tracking-widest text-tertiary font-bold mb-2">AI Summary</p>
-              <p class="text-sm text-on-surface leading-relaxed">Caller inquired about custom API pricing. Retell agent provided base rates but user requested a human callback.</p>
-            </div>
-            <div class="flex gap-2">
-              <button class="flex-1 py-3 bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-transform active:scale-95">View Details</button>
-              <button class="px-4 py-3 bg-surface-container-highest/50 text-on-surface-variant rounded-xl transition-colors hover:bg-surface-container-highest">
-                <span class="material-symbols-outlined text-sm">transcribe</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Log 3: Completed -->
-        <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-fixed-dim">
-                <span class="material-symbols-outlined">call_made</span>
-              </div>
-              <div>
-                <h3 class="font-headline font-bold text-on-surface">Dr. Alicia Thorne</h3>
-                <p class="text-xs text-on-surface-variant font-medium">Outbound - 8m 30s</p>
-              </div>
-            </div>
-            <div class="bg-secondary-container/10 px-3 py-1 rounded-full flex items-center gap-1.5">
-              <div class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim animate-pulse"></div>
-              <span class="text-[10px] font-bold text-secondary-fixed-dim uppercase tracking-wider">Completed</span>
-            </div>
-          </div>
-          <div class="space-y-4">
-            <div class="p-4 bg-surface-container-high rounded-lg">
-              <p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-2">AI Summary</p>
-              <p class="text-sm text-on-surface leading-relaxed">Discussed patient record migration. Agent confirmed the secure transfer protocols were met. Records will move by EOD.</p>
-            </div>
-            <div class="flex gap-2">
-              <button class="flex-1 py-3 bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-transform active:scale-95">View Details</button>
-              <button class="px-4 py-3 bg-surface-container-highest/50 text-on-surface-variant rounded-xl transition-colors hover:bg-surface-container-highest">
-                <span class="material-symbols-outlined text-sm">transcribe</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Transcript Spotlight -->
-        <div class="bg-surface-container-low rounded-[2rem] p-6 mt-4 overflow-hidden relative">
-          <div class="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
-            <span class="material-symbols-outlined text-[120px] text-primary">forum</span>
-          </div>
-          <div class="relative z-10">
-            <div class="mb-6">
-              <span class="bg-primary/10 text-primary-fixed-dim px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase mb-4 inline-block">Real-time Spotlight</span>
-              <h4 class="font-headline text-xl font-bold text-on-surface mb-2">Recent Call Transcript</h4>
-              <p class="text-sm text-on-surface-variant">Reviewing: <span class="text-primary">Sarah Jenkins</span> (ID: #RET-9902)</p>
-            </div>
-            <div class="flex gap-3 mb-6">
-              <div class="flex items-center gap-2 p-3 bg-surface-container-high/50 rounded-xl flex-1">
-                <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">sentiment_satisfied</span>
-                <p class="text-[11px] text-on-surface">Sentiment: <span class="font-bold text-secondary-fixed-dim uppercase">Positive</span></p>
-              </div>
-              <div class="flex items-center gap-2 p-3 bg-surface-container-high/50 rounded-xl flex-1">
-                <span class="material-symbols-outlined text-primary text-sm">timer</span>
-                <p class="text-[11px] text-on-surface">Wait: <span class="font-bold">0.4s</span></p>
-              </div>
-            </div>
-            <div class="space-y-4 max-h-64 overflow-y-auto hide-scrollbar">
-              <div class="flex gap-3">
-                <span class="text-[10px] font-bold uppercase text-primary mt-1 w-8 shrink-0">AI</span>
-                <p class="text-sm text-on-surface-variant bg-surface-container-high/40 p-4 rounded-2xl rounded-tl-none leading-relaxed">Hello Sarah, I'm calling from Ethereal AI regarding your quarterly review. Is now a good time to speak?</p>
-              </div>
-              <div class="flex gap-3 flex-row-reverse">
-                <span class="text-[10px] font-bold uppercase text-on-surface-variant mt-1 w-8 shrink-0 text-right">User</span>
-                <p class="text-sm text-on-surface bg-surface-container-highest/40 p-4 rounded-2xl rounded-tr-none leading-relaxed">Hi, I'm actually tied up right now. Could we push this to next week Monday afternoon?</p>
-              </div>
-              <div class="flex gap-3">
-                <span class="text-[10px] font-bold uppercase text-primary mt-1 w-8 shrink-0">AI</span>
-                <p class="text-sm text-on-surface-variant bg-surface-container-high/40 p-4 rounded-2xl rounded-tl-none leading-relaxed">Absolutely. I have October 14th available at 2:00 PM. Would that work for your schedule?</p>
-              </div>
-            </div>
-          </div>
+        <div id="transcript-spotlight" class="relative z-10">
+          <div class="animate-pulse"><div class="h-4 w-48 bg-surface-container-high rounded mb-4"></div><div class="h-3 w-full bg-surface-container-high rounded mb-2"></div><div class="h-3 w-2/3 bg-surface-container-high rounded"></div></div>
         </div>
       </div>
     </main>
@@ -690,113 +542,33 @@
 
   <template id="page-messages">
     <main class="px-6 max-w-2xl mx-auto space-y-10">
-      <!-- Priority Section -->
+      <!-- Twilio SMS -->
       <section>
         <div class="flex items-center justify-between mb-6">
-          <h2 class="font-headline font-bold text-2xl tracking-tight">High Priority</h2>
-          <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Critical Tasks</span>
+          <h2 class="font-headline font-bold text-2xl tracking-tight">Twilio Messages</h2>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">sms</span>
+            <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Live Feed</span>
+          </div>
         </div>
-        <div class="space-y-4">
-          <!-- Approval Request -->
-          <div class="bg-surface-container-low p-6 rounded-[1.5rem] border border-outline-variant/10 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <span class="material-symbols-outlined text-tertiary text-sm">mail</span>
-                <span class="font-label text-xs font-medium text-tertiary">Approval Required</span>
-              </div>
-              <h3 class="font-headline font-bold text-xl leading-tight mb-2">Q3 Marketing Budget Proposal</h3>
-              <p class="text-on-surface-variant text-sm line-clamp-2">The team has submitted the revised budget for the upcoming campaign. Action needed by EOD.</p>
-            </div>
-            <div class="flex gap-3 mt-6">
-              <button class="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-sm py-3 rounded-xl active:scale-95 duration-200">Approve</button>
-              <button class="flex-1 border border-outline-variant/30 text-on-surface font-headline font-bold text-sm py-3 rounded-xl active:scale-95 duration-200">Review</button>
-            </div>
-          </div>
-          <!-- Twilio Message -->
-          <div class="bg-surface-container p-6 rounded-[1.5rem] border border-outline-variant/10 flex flex-col">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">sms</span>
-              <span class="font-label text-xs font-medium text-secondary-fixed-dim">Twilio - Just now</span>
-            </div>
-            <div class="flex-grow">
-              <p class="text-on-surface font-medium italic mb-1">"Hey, are we still on for the 4 PM sync?"</p>
-              <p class="text-on-surface-variant text-xs">-- Sarah Jenkins</p>
-            </div>
-            <button class="mt-4 w-full bg-surface-container-high text-primary font-headline font-bold text-sm py-3 rounded-xl hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">Reply</button>
-          </div>
+        <div id="twilio-sms-feed" class="space-y-4">
+          <div class="bg-surface-container p-5 rounded-[1.5rem] animate-pulse"><div class="h-3 w-32 bg-surface-container-high rounded mb-3"></div><div class="h-4 w-full bg-surface-container-high rounded mb-2"></div><div class="h-3 w-48 bg-surface-container-high rounded"></div></div>
         </div>
       </section>
-      <!-- Activity Feed -->
+      <!-- Gmail Inbox -->
       <section class="space-y-6">
         <div class="flex items-center justify-between">
-          <h2 class="font-headline font-bold text-2xl tracking-tight">Activity Feed</h2>
-          <div class="flex gap-2">
-            <span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold uppercase tracking-wider text-primary cursor-pointer">All</span>
-            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-on-surface-variant cursor-pointer">Unread</span>
+          <h2 class="font-headline font-bold text-2xl tracking-tight">Inbox</h2>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-sm">mail</span>
+            <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">gavi.asst@fenixstaff.com</span>
           </div>
         </div>
-        <!-- To-Do -->
-        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-tertiary/20">
-          <div class="bg-tertiary-container/30 p-2.5 rounded-xl">
-            <span class="material-symbols-outlined text-tertiary">checklist</span>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start mb-1">
-              <h4 class="font-headline font-bold text-on-surface">Finalize travel documents</h4>
-              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">2h ago</span>
-            </div>
-            <p class="text-sm text-on-surface-variant mb-4">Assigned from your flight confirmation email.</p>
-            <div class="flex gap-2">
-              <button class="px-4 py-1.5 bg-tertiary/10 text-tertiary rounded-lg text-xs font-bold hover:bg-tertiary/20 transition-colors">Mark Done</button>
-              <button class="px-4 py-1.5 text-on-surface-variant rounded-lg text-xs font-bold hover:text-on-surface">Remind Me</button>
-            </div>
-          </div>
-        </div>
-        <!-- System Notification -->
-        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-primary/20">
-          <div class="bg-primary-container/30 p-2.5 rounded-xl">
-            <span class="material-symbols-outlined text-primary">analytics</span>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start mb-1">
-              <h4 class="font-headline font-bold text-on-surface">Weekly Usage Report</h4>
-              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">5h ago</span>
-            </div>
-            <p class="text-sm text-on-surface-variant">Your AI productivity has increased by 14% this week. View the full breakdown.</p>
-          </div>
-          <span class="material-symbols-outlined text-on-surface-variant text-sm">chevron_right</span>
-        </div>
-        <!-- Missed Call -->
-        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-secondary/20 cursor-pointer" onclick="app.navigate('calls')">
-          <div class="bg-secondary-container/10 p-2.5 rounded-xl">
-            <span class="material-symbols-outlined text-secondary-fixed-dim">call</span>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start mb-1">
-              <h4 class="font-headline font-bold text-on-surface">Missed call from Office</h4>
-              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">Yesterday</span>
-            </div>
-            <p class="text-sm text-on-surface-variant mb-4">Twilio log: Call duration &lt; 1s. Transcribed voicemail available.</p>
-            <button class="px-4 py-1.5 border border-outline-variant/30 text-on-surface rounded-lg text-xs font-bold active:scale-95 duration-200">Listen</button>
-          </div>
-        </div>
-        <!-- Subscription Expiring -->
-        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-error/20">
-          <div class="bg-error-container/20 p-2.5 rounded-xl">
-            <span class="material-symbols-outlined text-error">priority_high</span>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start mb-1">
-              <h4 class="font-headline font-bold text-on-surface">Subscription Expiring</h4>
-              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">Yesterday</span>
-            </div>
-            <p class="text-sm text-on-surface-variant mb-4">Action required: Your creative suite subscription requires a new payment method.</p>
-            <button class="px-4 py-1.5 bg-error-container text-on-error-container rounded-lg text-xs font-bold active:scale-95 duration-200">Update Billing</button>
-          </div>
+        <div id="gmail-feed" class="space-y-4">
+          <div class="bg-surface-container-low p-5 rounded-2xl animate-pulse"><div class="h-4 w-48 bg-surface-container-high rounded mb-3"></div><div class="h-3 w-full bg-surface-container-high rounded mb-2"></div><div class="h-3 w-2/3 bg-surface-container-high rounded"></div></div>
+          <div class="bg-surface-container-low p-5 rounded-2xl animate-pulse"><div class="h-4 w-40 bg-surface-container-high rounded mb-3"></div><div class="h-3 w-full bg-surface-container-high rounded mb-2"></div><div class="h-3 w-1/2 bg-surface-container-high rounded"></div></div>
         </div>
       </section>
-      <!-- Footer -->
       <div class="py-10 flex flex-col items-center justify-center opacity-30 text-center">
         <span class="material-symbols-outlined text-4xl mb-2">auto_awesome</span>
         <p class="font-headline font-medium text-sm">All caught up with the Ethereal Navigator</p>
@@ -805,62 +577,87 @@
   </template>
 
   <script>
+    const api = {
+      cache: {},
+      async fetch(endpoint) {
+        if (this.cache[endpoint] && Date.now() - this.cache[endpoint].ts < 60000) {
+          return this.cache[endpoint].data;
+        }
+        try {
+          const res = await fetch(`/api/${endpoint}`);
+          const data = await res.json();
+          this.cache[endpoint] = { data, ts: Date.now() };
+          return data;
+        } catch (e) {
+          console.error(`API error (${endpoint}):`, e);
+          return null;
+        }
+      }
+    };
+
+    const helpers = {
+      timeAgo(dateStr) {
+        if (!dateStr) return '';
+        const now = Date.now();
+        const then = new Date(dateStr).getTime();
+        if (isNaN(then)) return '';
+        const diff = Math.floor((now - then) / 1000);
+        if (diff < 60) return 'Just now';
+        if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+        if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+        if (diff < 172800) return 'Yesterday';
+        return `${Math.floor(diff / 86400)}d ago`;
+      },
+      formatDuration(ms) {
+        if (!ms) return '0s';
+        const s = Math.floor(ms / 1000);
+        const m = Math.floor(s / 60);
+        const rem = s % 60;
+        return m > 0 ? `${m}m ${rem}s` : `${rem}s`;
+      },
+      formatPhone(num) {
+        if (!num) return 'Unknown';
+        const clean = num.replace(/[^\d]/g, '');
+        if (clean.length === 11 && clean[0] === '1') {
+          return `+1 (${clean.slice(1,4)}) ${clean.slice(4,7)}-${clean.slice(7)}`;
+        }
+        return num;
+      },
+      extractName(from) {
+        if (!from) return 'Unknown';
+        const match = from.match(/^"?([^"<]+)"?\s*</);
+        return match ? match[1].trim() : from.split('@')[0];
+      },
+      truncate(str, len) {
+        if (!str) return '';
+        return str.length > len ? str.slice(0, len) + '...' : str;
+      }
+    };
+
     const app = {
       currentPage: null,
       isLoggedIn: false,
 
       init() {
-        // Check session
         this.isLoggedIn = localStorage.getItem('ethereal_logged_in') === 'true';
+        if (this.isLoggedIn) { this.showApp(); } else { this.showLogin(); }
 
-        if (this.isLoggedIn) {
-          this.showApp();
-        } else {
-          this.showLogin();
-        }
-
-        // Login handler
         document.getElementById('login-btn').addEventListener('click', (e) => { e.preventDefault(); this.handleLogin(); });
-        document.getElementById('login-email').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') { e.preventDefault(); this.handleLogin(); }
-        });
-        document.getElementById('login-password').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') { e.preventDefault(); this.handleLogin(); }
-        });
-
-        // Create account -> same as login for demo
+        document.getElementById('login-email').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); this.handleLogin(); } });
+        document.getElementById('login-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); this.handleLogin(); } });
         document.getElementById('create-account-link').addEventListener('click', (e) => { e.preventDefault(); this.handleLogin(); });
-
-        // Nav tabs
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-          tab.addEventListener('click', () => this.navigate(tab.dataset.page));
-        });
-
-        // Notification bell -> messages
+        document.querySelectorAll('.nav-tab').forEach(tab => { tab.addEventListener('click', () => this.navigate(tab.dataset.page)); });
         document.getElementById('notif-bell').addEventListener('click', () => this.navigate('messages'));
-
-        // Profile avatar -> logout
         document.getElementById('profile-avatar').addEventListener('click', () => {
-          if (confirm('Sign out of Ethereal AI?')) {
-            localStorage.removeItem('ethereal_logged_in');
-            this.isLoggedIn = false;
-            this.showLogin();
-          }
+          if (confirm('Sign out of Ethereal AI?')) { localStorage.removeItem('ethereal_logged_in'); this.isLoggedIn = false; this.showLogin(); }
         });
-
-        // Handle browser back/forward
-        window.addEventListener('popstate', (e) => {
-          if (e.state && e.state.page) {
-            this.renderPage(e.state.page, false);
-          }
-        });
+        window.addEventListener('popstate', (e) => { if (e.state && e.state.page) { this.renderPage(e.state.page, false); } });
       },
 
       handleLogin() {
         const btn = document.getElementById('login-btn');
         btn.textContent = 'Authenticating...';
         btn.disabled = true;
-
         setTimeout(() => {
           localStorage.setItem('ethereal_logged_in', 'true');
           this.isLoggedIn = true;
@@ -878,74 +675,265 @@
       showApp() {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-shell').style.display = 'block';
-
-        // Route from URL hash or default to home
         const hash = window.location.hash.replace('#/', '').replace('#', '');
         const page = ['home', 'receipts', 'calls', 'messages'].includes(hash) ? hash : 'home';
         this.navigate(page);
       },
 
-      navigate(page) {
-        this.renderPage(page, true);
-      },
+      navigate(page) { this.renderPage(page, true); },
 
       renderPage(page, pushState) {
         if (this.currentPage === page) return;
         this.currentPage = page;
+        if (pushState) { history.pushState({ page }, '', `#/${page}`); }
 
-        // Update URL
-        if (pushState) {
-          history.pushState({ page }, '', `#/${page}`);
-        }
-
-        // Update page title in header
-        const titles = {
-          home: 'Ethereal AI',
-          receipts: 'Receipts',
-          calls: 'Ethereal AI',
-          messages: 'Ethereal AI'
-        };
+        const titles = { home: 'Ethereal AI', receipts: 'Receipts', calls: 'Ethereal AI', messages: 'Ethereal AI' };
         document.getElementById('page-title').textContent = titles[page] || 'Ethereal AI';
 
-        // Update nav tabs
         document.querySelectorAll('.nav-tab').forEach(tab => {
           const isActive = tab.dataset.page === page;
-          if (isActive) {
-            tab.className = 'nav-tab flex flex-col items-center justify-center bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-white rounded-[1.5rem] px-5 py-2 active:scale-90 duration-200 cursor-pointer';
-            tab.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
-          } else {
-            tab.className = 'nav-tab flex flex-col items-center justify-center text-[#908f9d] px-5 py-2 hover:text-[#b0c6ff] transition-colors active:scale-90 duration-200 cursor-pointer';
-            tab.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
-          }
+          tab.className = isActive
+            ? 'nav-tab flex flex-col items-center justify-center bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-white rounded-[1.5rem] px-5 py-2 active:scale-90 duration-200 cursor-pointer'
+            : 'nav-tab flex flex-col items-center justify-center text-[#908f9d] px-5 py-2 hover:text-[#b0c6ff] transition-colors active:scale-90 duration-200 cursor-pointer';
+          tab.querySelector('.material-symbols-outlined').style.fontVariationSettings = isActive ? "'FILL' 1" : "'FILL' 0";
         });
 
-        // Render page content
         const template = document.getElementById(`page-${page}`);
         const content = document.getElementById('app-content');
         content.innerHTML = '';
         content.appendChild(template.content.cloneNode(true));
         content.classList.remove('page-enter');
-        void content.offsetWidth; // force reflow
+        void content.offsetWidth;
         content.classList.add('page-enter');
 
-        // Update FAB
+        // FAB
         const fabContainer = document.getElementById('fab-container');
         if (page === 'home') {
-          fabContainer.innerHTML = `
-            <button class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] shadow-2xl shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform">
-              <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">mic</span>
-            </button>`;
+          fabContainer.innerHTML = `<button class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] shadow-2xl shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">mic</span></button>`;
         } else if (page === 'receipts') {
-          fabContainer.innerHTML = `
-            <button class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] shadow-2xl shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform">
-              <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
-            </button>`;
-        } else {
-          fabContainer.innerHTML = '';
+          fabContainer.innerHTML = `<button class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] shadow-2xl shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform"><span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_a_photo</span></button>`;
+        } else { fabContainer.innerHTML = ''; }
+
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        // Load live data after render
+        if (page === 'home') this.loadHome();
+        if (page === 'calls') this.loadCalls();
+        if (page === 'messages') this.loadMessages();
+      },
+
+      async loadHome() {
+        // Load all feeds for dashboard summary
+        const [twilioMsg, twilioCalls, retell, gmail] = await Promise.all([
+          api.fetch('twilio-messages'),
+          api.fetch('twilio-calls'),
+          api.fetch('retell-calls'),
+          api.fetch('gmail-messages'),
+        ]);
+
+        // Update pending approvals count from Gmail
+        const inboxEmails = (gmail?.messages || []).filter(m => m.isUnread);
+        const pendingEl = document.getElementById('pending-count');
+        if (pendingEl) pendingEl.textContent = String(inboxEmails.length).padStart(2, '0');
+
+        // Update pending approvals list with real emails
+        const approvalList = document.getElementById('approval-list');
+        if (approvalList && gmail?.messages) {
+          const important = gmail.messages.slice(0, 3);
+          approvalList.innerHTML = important.map(m => `
+            <div class="glass-panel rounded-xl p-4 flex items-center justify-between border border-outline/10 group active:scale-[0.98] transition-all cursor-pointer" onclick="app.navigate('messages')">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+                  <span class="material-symbols-outlined text-on-surface-variant">${m.isUnread ? 'mark_email_unread' : 'mail'}</span>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-on-surface">${helpers.truncate(m.subject || '(No subject)', 35)}</p>
+                  <p class="text-[11px] text-on-surface-variant">${helpers.extractName(m.from)} - ${helpers.timeAgo(m.date)}</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-primary text-lg">chevron_right</span>
+            </div>
+          `).join('');
         }
 
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'instant' });
+        // Update Twilio activity with real messages
+        const twilioFeed = document.getElementById('twilio-feed');
+        if (twilioFeed && twilioMsg?.messages?.length) {
+          const latest = twilioMsg.messages[0];
+          twilioFeed.innerHTML = `
+            <div class="flex items-center gap-4 bg-surface-container-lowest/50 p-4 rounded-2xl border border-outline/5">
+              <div class="flex-1">
+                <p class="text-xs font-semibold text-on-surface">${latest.direction === 'inbound' ? 'From' : 'To'}: ${helpers.formatPhone(latest.direction === 'inbound' ? latest.from : latest.to)}</p>
+                <p class="text-[11px] text-on-surface-variant truncate">${helpers.truncate(latest.body, 60)}</p>
+              </div>
+              <span class="text-[10px] font-bold text-primary uppercase bg-primary-container/20 px-2 py-1 rounded-md">${helpers.timeAgo(latest.dateSent)}</span>
+            </div>`;
+        }
+
+        // Update Retell calls summary
+        const retellSummary = document.getElementById('retell-summary');
+        if (retellSummary && retell?.calls?.length) {
+          const recent = retell.calls.slice(0, 2);
+          const totalTalkMs = retell.calls.reduce((sum, c) => sum + (c.durationMs || 0), 0);
+          retellSummary.innerHTML = `
+            <div>
+              <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-tertiary">graphic_eq</span>
+                </div>
+                <span class="text-[10px] font-bold text-tertiary uppercase bg-tertiary-container/20 px-2 py-0.5 rounded-full">Retell AI</span>
+              </div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Recent Calls</span>
+              <div class="mt-3 space-y-2">
+                ${recent.map((c, i) => `
+                  <div class="flex items-center gap-2 ${i > 0 ? 'opacity-50' : ''}">
+                    <div class="w-1.5 h-1.5 rounded-full ${c.callStatus === 'ended' ? 'bg-tertiary' : 'bg-outline'}"></div>
+                    <p class="text-[11px] font-medium text-on-surface truncate">${c.agentName}: ${helpers.formatDuration(c.durationMs)}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-outline/10">
+              <p class="text-[10px] text-on-surface-variant leading-tight">Total talk time:<br/><span class="text-on-surface font-bold">${helpers.formatDuration(totalTalkMs)}</span> (${retell.calls.length} calls)</p>
+            </div>`;
+        }
+
+        // Update expense summary from Twilio
+        const expenseEl = document.getElementById('expense-summary');
+        if (expenseEl && twilioMsg?.messages) {
+          const total = twilioMsg.messages.reduce((sum, m) => {
+            const price = parseFloat(m.price) || 0;
+            return sum + Math.abs(price);
+          }, 0);
+          // We don't have real receipt data, keep the static expense display
+        }
+
+        // AI Briefing with real data
+        const briefing = document.getElementById('ai-briefing');
+        if (briefing) {
+          const emailCount = gmail?.messages?.length || 0;
+          const unreadCount = inboxEmails.length;
+          const callCount = retell?.calls?.length || 0;
+          const msgCount = twilioMsg?.messages?.length || 0;
+          briefing.innerHTML = `
+            You have <span class="text-primary font-semibold">${unreadCount} unread email${unreadCount !== 1 ? 's' : ''}</span> out of ${emailCount} recent messages.
+            Your Retell AI handled <span class="text-primary font-semibold">${callCount} call${callCount !== 1 ? 's' : ''}</span> recently,
+            and there are <span class="text-primary font-semibold">${msgCount} Twilio message${msgCount !== 1 ? 's' : ''}</span> in your activity feed.
+          `;
+        }
+      },
+
+      async loadCalls() {
+        const retell = await api.fetch('retell-calls');
+        const container = document.getElementById('call-log-list');
+        if (!container || !retell?.calls?.length) return;
+
+        container.innerHTML = retell.calls.slice(0, 10).map(c => {
+          const isActionNeeded = c.disconnectReason === 'user_hangup' && c.durationMs < 30000;
+          const statusColor = isActionNeeded ? 'error' : 'secondary-fixed-dim';
+          const statusLabel = c.callStatus === 'ended' ? (isActionNeeded ? 'Action Needed' : 'Completed') : c.callStatus;
+          const statusIcon = isActionNeeded ? 'error' : 'check_circle';
+          const borderClass = isActionNeeded ? 'border-l-4 border-error/30' : '';
+          const firstLine = c.transcript ? helpers.truncate(c.transcript.split('\n')[0].replace(/^(Agent|User):\s*/, ''), 120) : 'No transcript available';
+
+          return `
+            <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden ${borderClass}">
+              <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined">${c.fromNumber ? 'call_received' : 'call_made'}</span>
+                  </div>
+                  <div>
+                    <h3 class="font-headline font-bold text-on-surface">${c.fromNumber ? helpers.formatPhone(c.fromNumber) : c.agentName}</h3>
+                    <p class="text-xs text-on-surface-variant font-medium">${c.fromNumber ? 'Inbound' : 'Outbound'} - ${helpers.formatDuration(c.durationMs)}</p>
+                  </div>
+                </div>
+                <div class="bg-${isActionNeeded ? 'error-container/20' : 'secondary-container/10'} px-3 py-1 rounded-full flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[14px] text-${statusColor}" style="font-variation-settings: 'FILL' 1;">${statusIcon}</span>
+                  <span class="text-[10px] font-bold text-${statusColor} uppercase tracking-wider">${statusLabel}</span>
+                </div>
+              </div>
+              <div class="p-4 bg-surface-container-high rounded-lg mb-4">
+                <p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-2">AI Transcript</p>
+                <p class="text-sm text-on-surface leading-relaxed">${firstLine}</p>
+              </div>
+              <div class="text-[10px] text-on-surface-variant">${helpers.timeAgo(new Date(c.startTimestamp).toISOString())}</div>
+            </div>`;
+        }).join('');
+
+        // Transcript spotlight with most recent call
+        const spotlight = document.getElementById('transcript-spotlight');
+        if (spotlight && retell.calls.length > 0) {
+          const latest = retell.calls[0];
+          if (latest.transcript) {
+            const lines = latest.transcript.split('\n').filter(l => l.trim());
+            spotlight.innerHTML = `
+              <div class="mb-6">
+                <span class="bg-primary/10 text-primary-fixed-dim px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase mb-4 inline-block">Live Transcript</span>
+                <h4 class="font-headline text-xl font-bold text-on-surface mb-2">Latest Call Transcript</h4>
+                <p class="text-sm text-on-surface-variant">${latest.agentName} - ${helpers.formatDuration(latest.durationMs)} - ${helpers.timeAgo(new Date(latest.startTimestamp).toISOString())}</p>
+              </div>
+              <div class="space-y-4 max-h-64 overflow-y-auto hide-scrollbar">
+                ${lines.map(line => {
+                  const isAgent = line.startsWith('Agent:');
+                  const text = line.replace(/^(Agent|User):\s*/, '');
+                  return `
+                    <div class="flex gap-3 ${isAgent ? '' : 'flex-row-reverse'}">
+                      <span class="text-[10px] font-bold uppercase ${isAgent ? 'text-primary' : 'text-on-surface-variant'} mt-1 w-10 shrink-0 ${isAgent ? '' : 'text-right'}">${isAgent ? latest.agentName : 'Caller'}</span>
+                      <p class="text-sm ${isAgent ? 'text-on-surface-variant bg-surface-container-high/40 rounded-tl-none' : 'text-on-surface bg-surface-container-highest/40 rounded-tr-none'} p-3 rounded-2xl leading-relaxed">${text}</p>
+                    </div>`;
+                }).join('')}
+              </div>`;
+          }
+        }
+      },
+
+      async loadMessages() {
+        const [gmail, twilioMsg] = await Promise.all([
+          api.fetch('gmail-messages'),
+          api.fetch('twilio-messages'),
+        ]);
+
+        // Gmail inbox feed
+        const gmailFeed = document.getElementById('gmail-feed');
+        if (gmailFeed && gmail?.messages?.length) {
+          gmailFeed.innerHTML = gmail.messages.slice(0, 8).map(m => {
+            const isUnread = m.isUnread;
+            const borderColor = isUnread ? 'primary' : 'outline-variant';
+            const icon = m.subject?.includes('Call Summary') ? 'call' : (m.labelIds?.includes('SENT') ? 'send' : 'mail');
+            return `
+              <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-${borderColor}/20">
+                <div class="bg-${isUnread ? 'primary-container' : 'surface-container-high'}/30 p-2.5 rounded-xl">
+                  <span class="material-symbols-outlined text-${isUnread ? 'primary' : 'on-surface-variant'}">${icon}</span>
+                </div>
+                <div class="flex-grow min-w-0">
+                  <div class="flex justify-between items-start mb-1 gap-2">
+                    <h4 class="font-headline font-bold text-on-surface truncate">${helpers.truncate(m.subject || '(No subject)', 40)}</h4>
+                    <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest whitespace-nowrap">${helpers.timeAgo(m.date)}</span>
+                  </div>
+                  <p class="text-[11px] text-on-surface-variant mb-1">${helpers.extractName(m.from)}</p>
+                  <p class="text-sm text-on-surface-variant truncate">${helpers.truncate(m.snippet, 80)}</p>
+                </div>
+                ${isUnread ? '<span class="w-2 h-2 rounded-full bg-primary mt-2 shrink-0"></span>' : ''}
+              </div>`;
+          }).join('');
+        }
+
+        // Twilio SMS feed
+        const twilioFeed = document.getElementById('twilio-sms-feed');
+        if (twilioFeed && twilioMsg?.messages?.length) {
+          twilioFeed.innerHTML = twilioMsg.messages.slice(0, 5).map(m => `
+            <div class="bg-surface-container p-5 rounded-[1.5rem] border border-outline-variant/10 flex flex-col">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">sms</span>
+                <span class="font-label text-xs font-medium text-secondary-fixed-dim">Twilio - ${helpers.timeAgo(m.dateSent)}</span>
+                <span class="ml-auto text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${m.status === 'delivered' ? 'bg-[#4ade80]/10 text-[#4ade80]' : m.status === 'undelivered' ? 'bg-error-container/20 text-error' : 'bg-surface-container-high text-on-surface-variant'}">${m.status}</span>
+              </div>
+              <p class="text-on-surface text-sm mb-1">${helpers.truncate(m.body, 120)}</p>
+              <p class="text-on-surface-variant text-[11px]">${m.direction === 'inbound' ? 'From' : 'To'}: ${helpers.formatPhone(m.direction === 'inbound' ? m.from : m.to)}</p>
+            </div>
+          `).join('');
+        }
       }
     };
 
