@@ -819,13 +819,16 @@
 
         list.innerHTML = receipts.map(r => {
           const hasImage = r.mediaUrls && r.mediaUrls.length > 0;
-          const imageUrl = hasImage ? r.mediaUrls[0].url : '';
           const note = r.body || 'Receipt image';
+          // Build proxied image URLs
+          const proxyImages = (r.mediaUrls || []).map(m =>
+            `/api/media-proxy?messageSid=${r.sid}&mediaSid=${m.sid}`
+          );
           return `
             <div class="glass-card rounded-xl border border-outline/10 overflow-hidden">
               ${hasImage ? `
-                <div class="w-full h-48 bg-surface-container-high relative overflow-hidden">
-                  <img src="${imageUrl}" alt="Receipt" class="w-full h-full object-cover" crossorigin="anonymous" />
+                <div class="w-full ${proxyImages.length > 1 ? 'grid grid-cols-2 gap-1' : ''} bg-surface-container-high relative overflow-hidden">
+                  ${proxyImages.map(url => `<div class="h-48 overflow-hidden"><img src="${url}" alt="Receipt" class="w-full h-full object-cover" /></div>`).join('')}
                   <div class="absolute top-3 right-3 bg-[#131313]/70 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
                     <span class="material-symbols-outlined text-secondary-fixed-dim text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                     <span class="text-[10px] font-bold text-secondary-fixed-dim uppercase">Captured</span>
