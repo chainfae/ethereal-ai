@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#131313" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Ethereal AI</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary": "#00363d",
+            "outline-variant": "#454652",
+            "on-primary-container": "#6394ff",
+            "on-secondary-fixed": "#001f24",
+            "secondary": "#bdf4ff",
+            "surface-dim": "#131313",
+            "surface-container-highest": "#353534",
+            "surface-container-high": "#2a2a2a",
+            "secondary-fixed-dim": "#00daf3",
+            "outline": "#908f9d",
+            "surface-container-lowest": "#0e0e0e",
+            "surface-container": "#201f1f",
+            "primary-container": "#002c6d",
+            "primary-fixed": "#d9e2ff",
+            "on-tertiary-container": "#a084ff",
+            "inverse-primary": "#0058ca",
+            "secondary-container": "#00e3fd",
+            "background": "#131313",
+            "tertiary-fixed": "#e8deff",
+            "surface-tint": "#b0c6ff",
+            "secondary-fixed": "#9cf0ff",
+            "on-primary-fixed-variant": "#00429b",
+            "primary-fixed-dim": "#b0c6ff",
+            "tertiary": "#cdbdff",
+            "tertiary-container": "#360094",
+            "tertiary-fixed-dim": "#cdbdff",
+            "on-primary": "#002d6e",
+            "inverse-on-surface": "#313030",
+            "on-secondary-container": "#00616d",
+            "surface-container-low": "#1c1b1b",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "surface-bright": "#393939",
+            "surface": "#131313",
+            "on-surface": "#e5e2e1",
+            "on-tertiary-fixed-variant": "#4f00d0",
+            "on-primary-fixed": "#001945",
+            "error-container": "#93000a",
+            "primary": "#b0c6ff",
+            "error": "#ffb4ab",
+            "on-tertiary-fixed": "#20005f",
+            "on-surface-variant": "#c6c5d4",
+            "on-secondary-fixed-variant": "#004f58",
+            "surface-variant": "#353534",
+            "on-tertiary": "#370096",
+            "inverse-surface": "#e5e2e1",
+            "on-background": "#e5e2e1"
+          },
+          fontFamily: {
+            headline: ["Manrope"],
+            body: ["Inter"],
+            label: ["Inter"]
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+        },
+      },
+    };
+  </script>
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    html, body { overscroll-behavior: none; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+    }
+    body {
+      background-color: #131313;
+      color: #e5e2e1;
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(53, 53, 52, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .glass-card {
+      background: rgba(53, 53, 52, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    #app-content {
+      animation: fadeIn 0.25s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .page-enter {
+      animation: fadeIn 0.25s ease-out;
+    }
+    /* Hide scrollbar but allow scroll */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Safe area for notch devices */
+    @supports (padding-top: env(safe-area-inset-top)) {
+      header { padding-top: env(safe-area-inset-top); }
+      nav { padding-bottom: env(safe-area-inset-bottom); }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Login Screen (shown first if not logged in) -->
+  <div id="login-screen" class="hidden min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px]"></div>
+      <div class="absolute top-[20%] -right-[5%] w-[30%] h-[30%] bg-tertiary/5 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[30%] bg-gradient-to-t from-primary-container/20 to-transparent blur-[80px]"></div>
+    </div>
+    <main class="w-full max-w-[420px] z-10 space-y-10">
+      <header class="flex flex-col items-center text-center space-y-4">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-[0_0_30px_rgba(176,198,255,0.3)]">
+          <span class="material-symbols-outlined text-4xl text-on-primary">blur_on</span>
+        </div>
+        <div class="space-y-1">
+          <h1 class="font-headline font-extrabold text-3xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-primary to-on-primary-container">
+            Aether Intelligence
+          </h1>
+          <p class="text-on-surface-variant font-label text-sm uppercase tracking-[0.2em] opacity-80">The Ethereal Navigator</p>
+        </div>
+      </header>
+      <section class="glass-panel p-8 rounded-[2.5rem] shadow-[0_32px_64px_-15px_rgba(0,44,109,0.12)] space-y-8">
+        <div class="space-y-6">
+          <div class="space-y-4">
+            <div class="space-y-2">
+              <label class="text-xs font-semibold text-primary px-1 tracking-wider uppercase">Email or Username</label>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-outline group-focus-within:text-primary transition-colors">
+                  <span class="material-symbols-outlined text-xl">alternate_email</span>
+                </div>
+                <input id="login-email" class="w-full bg-surface-container-lowest border-0 ring-1 ring-outline/10 focus:ring-2 focus:ring-primary/40 rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline/40 transition-all outline-none" placeholder="navigator@aether.ai" type="text" />
+              </div>
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center px-1">
+                <label class="text-xs font-semibold text-primary tracking-wider uppercase">Password</label>
+                <a class="text-[10px] text-on-surface-variant hover:text-primary transition-colors font-bold uppercase tracking-widest cursor-pointer">Forgot?</a>
+              </div>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-outline group-focus-within:text-primary transition-colors">
+                  <span class="material-symbols-outlined text-xl">lock</span>
+                </div>
+                <input id="login-password" class="w-full bg-surface-container-lowest border-0 ring-1 ring-outline/10 focus:ring-2 focus:ring-primary/40 rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline/40 transition-all outline-none" placeholder="••••••••" type="password" />
+              </div>
+            </div>
+          </div>
+          <button id="login-btn" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-xl shadow-[0_8px_24px_-4px_rgba(176,198,255,0.4)] hover:shadow-[0_12px_32px_-4px_rgba(176,198,255,0.6)] active:scale-[0.98] transition-all duration-300">
+            Login
+          </button>
+        </div>
+        <div class="relative py-2">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline/10"></div></div>
+          <div class="relative flex justify-center text-xs uppercase tracking-widest"><span class="bg-surface-container-low px-4 text-outline/60">Secure Access</span></div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <button class="flex items-center justify-center p-4 rounded-xl bg-surface-container-high border border-outline/5 hover:border-primary/20 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-2xl text-on-surface-variant">mail</span>
+          </button>
+          <button class="flex items-center justify-center p-4 rounded-xl bg-surface-container-high border border-outline/5 hover:border-primary/20 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-2xl text-on-surface-variant">face</span>
+          </button>
+          <button class="flex items-center justify-center p-4 rounded-xl bg-surface-container-high border border-outline/5 hover:border-primary/20 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-2xl text-on-surface-variant">fingerprint</span>
+          </button>
+        </div>
+      </section>
+      <footer class="text-center space-y-6">
+        <p class="text-on-surface-variant text-sm">
+          New to the intelligence?
+          <a class="text-primary font-bold hover:underline decoration-primary/40 underline-offset-4 ml-1 cursor-pointer" id="create-account-link">Create Account</a>
+        </p>
+        <div class="flex items-center justify-center space-x-4 opacity-40">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim shadow-[0_0_8px_#00daf3]"></span>
+          <span class="text-[10px] uppercase tracking-[0.3em] font-medium">Encrypted Node Access</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- App Shell (shown after login) -->
+  <div id="app-shell" class="hidden">
+    <!-- TopAppBar -->
+    <header id="top-bar" class="fixed top-0 w-full z-50 bg-[#131313] shadow-[0_32px_32px_rgba(0,44,109,0.08)]">
+      <div class="flex items-center justify-between px-6 h-16 w-full max-w-2xl mx-auto">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full overflow-hidden border border-outline/20 cursor-pointer" id="profile-avatar">
+            <div class="w-full h-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-sm">person</span>
+            </div>
+          </div>
+        </div>
+        <h1 id="page-title" class="text-[#b0c6ff] font-headline tracking-tight font-bold text-xl">Ethereal AI</h1>
+        <div class="active:scale-95 duration-200 cursor-pointer relative" id="notif-bell">
+          <span class="material-symbols-outlined text-[#b0c6ff]">notifications</span>
+          <span id="notif-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full text-[8px] font-bold text-white flex items-center justify-center">3</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div id="app-content" class="pt-20 pb-32"></div>
+
+    <!-- FAB (context-dependent) -->
+    <div id="fab-container" class="fixed bottom-28 right-6 z-50"></div>
+
+    <!-- BottomNavBar -->
+    <nav class="fixed bottom-0 w-full z-50 rounded-t-[2rem] bg-[#131313]/80 backdrop-blur-xl border-t border-[#908f9d]/15 shadow-2xl">
+      <div class="flex justify-around items-center w-full px-4 pb-6 pt-3 max-w-2xl mx-auto">
+        <a data-page="home" class="nav-tab flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-200 cursor-pointer">
+          <span class="material-symbols-outlined">home</span>
+          <span class="font-body text-[10px] font-medium uppercase tracking-wider mt-0.5">Home</span>
+        </a>
+        <a data-page="receipts" class="nav-tab flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-200 cursor-pointer">
+          <span class="material-symbols-outlined">receipt_long</span>
+          <span class="font-body text-[10px] font-medium uppercase tracking-wider mt-0.5">Receipts</span>
+        </a>
+        <a data-page="calls" class="nav-tab flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-200 cursor-pointer">
+          <span class="material-symbols-outlined">call</span>
+          <span class="font-body text-[10px] font-medium uppercase tracking-wider mt-0.5">Calls</span>
+        </a>
+        <a data-page="messages" class="nav-tab flex flex-col items-center justify-center px-5 py-2 active:scale-90 duration-200 cursor-pointer">
+          <span class="material-symbols-outlined">forum</span>
+          <span class="font-body text-[10px] font-medium uppercase tracking-wider mt-0.5">Messages</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Page Templates -->
+  <template id="page-home">
+    <main class="px-6 max-w-2xl mx-auto space-y-10">
+      <!-- AI Intelligence Summary -->
+      <section class="space-y-4">
+        <div class="flex justify-between items-end">
+          <div>
+            <span class="font-label text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">System Status</span>
+            <h2 class="font-headline font-extrabold text-2xl tracking-tight text-on-surface">Ethereal Intelligence</h2>
+          </div>
+          <div class="bg-secondary-container/10 px-3 py-1 rounded-full flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+            <span class="text-secondary-fixed-dim font-label text-[10px] font-bold uppercase tracking-widest">Active</span>
+          </div>
+        </div>
+        <!-- Pending Approvals -->
+        <div class="relative overflow-hidden rounded-[1.5rem] bg-surface-container-low p-6 border border-outline/5">
+          <div class="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+          <div class="relative z-10 flex justify-between items-start mb-6">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="material-symbols-outlined text-primary text-sm">mail</span>
+                <span class="font-label text-[11px] font-semibold text-primary uppercase tracking-[0.15em]">Mail Extraction</span>
+              </div>
+              <h3 class="font-headline text-xl font-bold text-on-surface">Pending Approvals</h3>
+            </div>
+            <div class="text-right">
+              <span class="block font-headline text-3xl font-black text-primary leading-none" id="pending-count">04</span>
+              <span class="text-[10px] text-on-surface-variant font-medium">Critical Tasks</span>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="glass-panel rounded-xl p-4 flex items-center justify-between border border-outline/10 group active:scale-[0.98] transition-all cursor-pointer" onclick="app.navigate('messages')">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+                  <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-on-surface">Reschedule Design Sync</p>
+                  <p class="text-[11px] text-on-surface-variant">From: Sarah Miller - Email</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-primary text-lg">chevron_right</span>
+            </div>
+            <div class="glass-panel rounded-xl p-4 flex items-center justify-between border border-outline/10 group active:scale-[0.98] transition-all cursor-pointer" onclick="app.navigate('messages')">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+                  <span class="material-symbols-outlined text-on-surface-variant">description</span>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-on-surface">Approve Q4 Projections</p>
+                  <p class="text-[11px] text-on-surface-variant">From: Finance Dept - Attachment</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-primary text-lg">chevron_right</span>
+            </div>
+          </div>
+          <button class="w-full mt-6 py-3 rounded-xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-white font-label text-xs font-bold uppercase tracking-widest shadow-lg shadow-primary-container/20 active:scale-95 duration-200" onclick="app.navigate('messages')">
+            Review All Tasks
+          </button>
+        </div>
+      </section>
+
+      <!-- Bento Grid -->
+      <section class="grid grid-cols-2 gap-4">
+        <!-- Expenses Card -->
+        <div class="bg-surface-container-low rounded-[1.5rem] p-5 flex flex-col justify-between border border-outline/5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('receipts')">
+          <div class="relative z-10">
+            <div class="w-10 h-10 rounded-full bg-secondary-container/10 flex items-center justify-center mb-4">
+              <span class="material-symbols-outlined text-secondary-fixed-dim">receipt_long</span>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Expense Flow</span>
+            <h4 class="font-headline text-lg font-bold text-on-surface mt-1">$2,482.00</h4>
+            <p class="text-[10px] text-on-secondary-container font-medium mt-1">12 receipts scanned</p>
+          </div>
+          <div class="mt-6 flex gap-1 items-end">
+            <div class="w-full h-8 bg-surface-container-high rounded-sm relative overflow-hidden">
+              <div class="absolute bottom-0 w-full bg-primary/40 h-[60%] rounded-t-sm"></div>
+            </div>
+            <div class="w-full h-12 bg-surface-container-high rounded-sm relative overflow-hidden">
+              <div class="absolute bottom-0 w-full bg-primary h-[85%] rounded-t-sm"></div>
+            </div>
+            <div class="w-full h-10 bg-surface-container-high rounded-sm relative overflow-hidden">
+              <div class="absolute bottom-0 w-full bg-primary/60 h-[40%] rounded-t-sm"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Retell AI Calls Card -->
+        <div class="bg-surface-container-low rounded-[1.5rem] p-5 flex flex-col justify-between border border-outline/5 cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('calls')">
+          <div>
+            <div class="flex justify-between items-start mb-4">
+              <div class="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center">
+                <span class="material-symbols-outlined text-tertiary">graphic_eq</span>
+              </div>
+              <span class="text-[10px] font-bold text-tertiary uppercase bg-tertiary-container/20 px-2 py-0.5 rounded-full">Retell AI</span>
+            </div>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Recent Calls</span>
+            <div class="mt-3 space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
+                <p class="text-[11px] font-medium text-on-surface truncate">Inbound: Client Inquiry</p>
+              </div>
+              <div class="flex items-center gap-2 opacity-50">
+                <div class="w-1.5 h-1.5 rounded-full bg-outline"></div>
+                <p class="text-[11px] font-medium text-on-surface truncate">Outbound: Vendor Check</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-outline/10">
+            <p class="text-[10px] text-on-surface-variant leading-tight">Total talk time today:<br/><span class="text-on-surface font-bold">14m 32s</span></p>
+          </div>
+        </div>
+        <!-- Twilio Messages (Span 2) -->
+        <div class="col-span-2 bg-surface-container-low rounded-[1.5rem] p-6 border border-outline/5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('messages')">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-[#F22F46]/10 rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-[#F22F46]">sms</span>
+              </div>
+              <div>
+                <h4 class="font-headline text-base font-bold text-on-surface">Twilio Activity</h4>
+                <p class="text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">Real-time messaging</p>
+              </div>
+            </div>
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-low bg-primary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-sm">person</span>
+              </div>
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-low bg-tertiary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-tertiary text-sm">person</span>
+              </div>
+              <div class="w-8 h-8 rounded-full border-2 border-surface-container-low bg-surface-container-high flex items-center justify-center text-[10px] font-bold text-on-surface">+3</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-surface-container-lowest/50 p-4 rounded-2xl border border-outline/5">
+            <div class="flex-1">
+              <p class="text-xs font-semibold text-on-surface">Project Apollo Update</p>
+              <p class="text-[11px] text-on-surface-variant truncate">The automated workflow has been triggered...</p>
+            </div>
+            <span class="text-[10px] font-bold text-primary uppercase bg-primary-container/20 px-2 py-1 rounded-md">New</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Morning Briefing -->
+      <section class="pb-8">
+        <div class="glass-panel border border-primary/10 rounded-[2rem] p-6 relative">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 flex-shrink-0 rounded-2xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-lg shadow-primary/20">
+              <span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">bolt</span>
+            </div>
+            <div class="space-y-3">
+              <h5 class="font-headline font-bold text-on-surface">AI Morning Briefing</h5>
+              <p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                You have a busy morning. I've successfully reconciled <span class="text-primary font-semibold">8 expenses</span> and drafted replies to <span class="text-primary font-semibold">3 high-priority</span> emails from the Design Sync thread. Shall I finalize the Retell summary for your 10 AM?
+              </p>
+              <div class="flex gap-2 pt-2">
+                <button class="px-4 py-2 rounded-full border border-outline/20 text-[11px] font-bold uppercase tracking-wider text-on-surface hover:bg-surface-container-high transition-colors">Not now</button>
+                <button class="px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-[11px] font-bold uppercase tracking-wider text-primary hover:bg-primary/20 transition-colors">Yes, finalize</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </template>
+
+  <template id="page-receipts">
+    <main class="px-6 max-w-2xl mx-auto space-y-10">
+      <!-- Weekly Trends -->
+      <section class="space-y-4">
+        <div class="flex justify-between items-end">
+          <div>
+            <span class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Weekly Overview</span>
+            <h2 class="font-headline text-2xl font-extrabold tracking-tight text-primary-fixed-dim">$1,248.50</h2>
+          </div>
+          <div class="flex items-center gap-2 bg-secondary-container/10 px-3 py-1 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
+            <span class="font-label text-xs font-medium text-secondary-fixed-dim uppercase tracking-tighter">AI Analysis Active</span>
+          </div>
+        </div>
+        <div class="h-32 w-full flex items-end justify-between gap-2 px-2">
+          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[40%]">
+            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[65%]">
+            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[35%]">
+            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[90%]">
+            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[55%]">
+            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="flex-1 bg-surface-container-low rounded-t-lg relative group h-[70%]">
+            <div class="absolute inset-0 bg-primary/20 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+          <div class="flex-1 bg-primary rounded-t-lg relative h-[100%] shadow-[0_-4px_12px_rgba(176,198,255,0.3)]">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary">Today</div>
+          </div>
+        </div>
+      </section>
+      <!-- Capture Button -->
+      <section>
+        <button class="w-full py-4 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-lg flex items-center justify-center gap-3 shadow-[0_8px_24px_rgba(0,44,109,0.2)] active:scale-95 transition-transform duration-200">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
+          Capture New Receipt
+        </button>
+      </section>
+      <!-- Receipt List -->
+      <section class="space-y-6">
+        <div class="flex justify-between items-center">
+          <h3 class="font-headline text-lg font-bold tracking-tight">Recent Activity</h3>
+          <span class="font-label text-xs text-outline hover:text-primary transition-colors cursor-pointer">View All</span>
+        </div>
+        <div class="space-y-4" id="receipt-list">
+          <!-- Pending -->
+          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
+            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary-fixed-dim">
+              <span class="material-symbols-outlined">receipt_long</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <h4 class="font-headline font-bold text-on-surface">Blue Bottle Coffee</h4>
+                <span class="font-headline font-extrabold text-on-surface">$12.45</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 24, 2023</span>
+                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
+                <div class="flex items-center gap-1 text-secondary-fixed-dim">
+                  <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Pending AI Review</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Approved -->
+          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
+            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
+              <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <h4 class="font-headline font-bold text-on-surface">Apple Store</h4>
+                <span class="font-headline font-extrabold text-on-surface">$199.00</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 23, 2023</span>
+                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
+                <div class="flex items-center gap-1 text-[#4ade80]">
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Approved</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Flagged -->
+          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
+            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-error">
+              <span class="material-symbols-outlined">restaurant</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <h4 class="font-headline font-bold text-on-surface">The Night Owl Bistro</h4>
+                <span class="font-headline font-extrabold text-on-surface">$84.20</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 22, 2023</span>
+                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
+                <div class="flex items-center gap-1 text-error">
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">report</span>
+                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Flagged</span>
+                </div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-outline/40">chevron_right</span>
+          </div>
+          <!-- Approved 2 -->
+          <div class="glass-card p-4 rounded-xl border border-outline/10 flex items-center justify-between gap-4">
+            <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-secondary-fixed">
+              <span class="material-symbols-outlined">local_gas_station</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <h4 class="font-headline font-bold text-on-surface">Shell Station</h4>
+                <span class="font-headline font-extrabold text-on-surface">$56.00</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="font-label text-[10px] text-on-surface-variant uppercase">Oct 21, 2023</span>
+                <span class="w-1 h-1 rounded-full bg-outline/30"></span>
+                <div class="flex items-center gap-1 text-[#4ade80]">
+                  <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                  <span class="font-label text-[10px] font-bold uppercase tracking-tighter">Approved</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </template>
+
+  <template id="page-calls">
+    <main class="px-6 max-w-2xl mx-auto">
+      <div class="mb-8 mt-2">
+        <p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-semibold mb-2">Voice Agent Intelligence</p>
+        <h2 class="font-headline text-3xl font-extrabold tracking-tight text-on-surface">Retell Call Analytics</h2>
+      </div>
+      <div class="space-y-6">
+        <!-- Log 1: Resolved -->
+        <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">call_made</span>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-on-surface">Sarah Jenkins</h3>
+                <p class="text-xs text-on-surface-variant font-medium">Outbound - 4m 12s</p>
+              </div>
+            </div>
+            <div class="bg-secondary-container/10 px-3 py-1 rounded-full flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[14px] text-secondary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              <span class="text-[10px] font-bold text-secondary-fixed-dim uppercase tracking-wider">Resolved</span>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="p-4 bg-surface-container-high rounded-lg">
+              <p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-2">AI Summary</p>
+              <p class="text-sm text-on-surface leading-relaxed">Agent successfully rescheduled the quarterly review to Oct 14th at 2:00 PM. No further action needed.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 py-3 bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-transform active:scale-95">View Details</button>
+              <button class="px-4 py-3 bg-surface-container-highest/50 text-on-surface-variant rounded-xl transition-colors hover:bg-surface-container-highest">
+                <span class="material-symbols-outlined text-sm">transcribe</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Log 2: Action Needed -->
+        <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden border-l-4 border-error/30">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">
+                <span class="material-symbols-outlined">call_received</span>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-on-surface">+1 (555) 012-9843</h3>
+                <p class="text-xs text-on-surface-variant font-medium">Inbound - 1m 45s</p>
+              </div>
+            </div>
+            <div class="bg-error-container/20 px-3 py-1 rounded-full flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[14px] text-error" style="font-variation-settings: 'FILL' 1;">error</span>
+              <span class="text-[10px] font-bold text-error uppercase tracking-wider">Action Needed</span>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="p-4 bg-surface-container-high rounded-lg">
+              <p class="text-[10px] uppercase tracking-widest text-tertiary font-bold mb-2">AI Summary</p>
+              <p class="text-sm text-on-surface leading-relaxed">Caller inquired about custom API pricing. Retell agent provided base rates but user requested a human callback.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 py-3 bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-transform active:scale-95">View Details</button>
+              <button class="px-4 py-3 bg-surface-container-highest/50 text-on-surface-variant rounded-xl transition-colors hover:bg-surface-container-highest">
+                <span class="material-symbols-outlined text-sm">transcribe</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Log 3: Completed -->
+        <div class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-fixed-dim">
+                <span class="material-symbols-outlined">call_made</span>
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-on-surface">Dr. Alicia Thorne</h3>
+                <p class="text-xs text-on-surface-variant font-medium">Outbound - 8m 30s</p>
+              </div>
+            </div>
+            <div class="bg-secondary-container/10 px-3 py-1 rounded-full flex items-center gap-1.5">
+              <div class="w-1.5 h-1.5 rounded-full bg-secondary-fixed-dim animate-pulse"></div>
+              <span class="text-[10px] font-bold text-secondary-fixed-dim uppercase tracking-wider">Completed</span>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="p-4 bg-surface-container-high rounded-lg">
+              <p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-2">AI Summary</p>
+              <p class="text-sm text-on-surface leading-relaxed">Discussed patient record migration. Agent confirmed the secure transfer protocols were met. Records will move by EOD.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 py-3 bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-on-primary rounded-xl text-xs font-bold uppercase tracking-widest transition-transform active:scale-95">View Details</button>
+              <button class="px-4 py-3 bg-surface-container-highest/50 text-on-surface-variant rounded-xl transition-colors hover:bg-surface-container-highest">
+                <span class="material-symbols-outlined text-sm">transcribe</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Transcript Spotlight -->
+        <div class="bg-surface-container-low rounded-[2rem] p-6 mt-4 overflow-hidden relative">
+          <div class="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
+            <span class="material-symbols-outlined text-[120px] text-primary">forum</span>
+          </div>
+          <div class="relative z-10">
+            <div class="mb-6">
+              <span class="bg-primary/10 text-primary-fixed-dim px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter uppercase mb-4 inline-block">Real-time Spotlight</span>
+              <h4 class="font-headline text-xl font-bold text-on-surface mb-2">Recent Call Transcript</h4>
+              <p class="text-sm text-on-surface-variant">Reviewing: <span class="text-primary">Sarah Jenkins</span> (ID: #RET-9902)</p>
+            </div>
+            <div class="flex gap-3 mb-6">
+              <div class="flex items-center gap-2 p-3 bg-surface-container-high/50 rounded-xl flex-1">
+                <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">sentiment_satisfied</span>
+                <p class="text-[11px] text-on-surface">Sentiment: <span class="font-bold text-secondary-fixed-dim uppercase">Positive</span></p>
+              </div>
+              <div class="flex items-center gap-2 p-3 bg-surface-container-high/50 rounded-xl flex-1">
+                <span class="material-symbols-outlined text-primary text-sm">timer</span>
+                <p class="text-[11px] text-on-surface">Wait: <span class="font-bold">0.4s</span></p>
+              </div>
+            </div>
+            <div class="space-y-4 max-h-64 overflow-y-auto hide-scrollbar">
+              <div class="flex gap-3">
+                <span class="text-[10px] font-bold uppercase text-primary mt-1 w-8 shrink-0">AI</span>
+                <p class="text-sm text-on-surface-variant bg-surface-container-high/40 p-4 rounded-2xl rounded-tl-none leading-relaxed">Hello Sarah, I'm calling from Ethereal AI regarding your quarterly review. Is now a good time to speak?</p>
+              </div>
+              <div class="flex gap-3 flex-row-reverse">
+                <span class="text-[10px] font-bold uppercase text-on-surface-variant mt-1 w-8 shrink-0 text-right">User</span>
+                <p class="text-sm text-on-surface bg-surface-container-highest/40 p-4 rounded-2xl rounded-tr-none leading-relaxed">Hi, I'm actually tied up right now. Could we push this to next week Monday afternoon?</p>
+              </div>
+              <div class="flex gap-3">
+                <span class="text-[10px] font-bold uppercase text-primary mt-1 w-8 shrink-0">AI</span>
+                <p class="text-sm text-on-surface-variant bg-surface-container-high/40 p-4 rounded-2xl rounded-tl-none leading-relaxed">Absolutely. I have October 14th available at 2:00 PM. Would that work for your schedule?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </template>
+
+  <template id="page-messages">
+    <main class="px-6 max-w-2xl mx-auto space-y-10">
+      <!-- Priority Section -->
+      <section>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-headline font-bold text-2xl tracking-tight">High Priority</h2>
+          <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Critical Tasks</span>
+        </div>
+        <div class="space-y-4">
+          <!-- Approval Request -->
+          <div class="bg-surface-container-low p-6 rounded-[1.5rem] border border-outline-variant/10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-tertiary text-sm">mail</span>
+                <span class="font-label text-xs font-medium text-tertiary">Approval Required</span>
+              </div>
+              <h3 class="font-headline font-bold text-xl leading-tight mb-2">Q3 Marketing Budget Proposal</h3>
+              <p class="text-on-surface-variant text-sm line-clamp-2">The team has submitted the revised budget for the upcoming campaign. Action needed by EOD.</p>
+            </div>
+            <div class="flex gap-3 mt-6">
+              <button class="flex-1 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-sm py-3 rounded-xl active:scale-95 duration-200">Approve</button>
+              <button class="flex-1 border border-outline-variant/30 text-on-surface font-headline font-bold text-sm py-3 rounded-xl active:scale-95 duration-200">Review</button>
+            </div>
+          </div>
+          <!-- Twilio Message -->
+          <div class="bg-surface-container p-6 rounded-[1.5rem] border border-outline-variant/10 flex flex-col">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">sms</span>
+              <span class="font-label text-xs font-medium text-secondary-fixed-dim">Twilio - Just now</span>
+            </div>
+            <div class="flex-grow">
+              <p class="text-on-surface font-medium italic mb-1">"Hey, are we still on for the 4 PM sync?"</p>
+              <p class="text-on-surface-variant text-xs">-- Sarah Jenkins</p>
+            </div>
+            <button class="mt-4 w-full bg-surface-container-high text-primary font-headline font-bold text-sm py-3 rounded-xl hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">Reply</button>
+          </div>
+        </div>
+      </section>
+      <!-- Activity Feed -->
+      <section class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="font-headline font-bold text-2xl tracking-tight">Activity Feed</h2>
+          <div class="flex gap-2">
+            <span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold uppercase tracking-wider text-primary cursor-pointer">All</span>
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-on-surface-variant cursor-pointer">Unread</span>
+          </div>
+        </div>
+        <!-- To-Do -->
+        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-tertiary/20">
+          <div class="bg-tertiary-container/30 p-2.5 rounded-xl">
+            <span class="material-symbols-outlined text-tertiary">checklist</span>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start mb-1">
+              <h4 class="font-headline font-bold text-on-surface">Finalize travel documents</h4>
+              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">2h ago</span>
+            </div>
+            <p class="text-sm text-on-surface-variant mb-4">Assigned from your flight confirmation email.</p>
+            <div class="flex gap-2">
+              <button class="px-4 py-1.5 bg-tertiary/10 text-tertiary rounded-lg text-xs font-bold hover:bg-tertiary/20 transition-colors">Mark Done</button>
+              <button class="px-4 py-1.5 text-on-surface-variant rounded-lg text-xs font-bold hover:text-on-surface">Remind Me</button>
+            </div>
+          </div>
+        </div>
+        <!-- System Notification -->
+        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-primary/20">
+          <div class="bg-primary-container/30 p-2.5 rounded-xl">
+            <span class="material-symbols-outlined text-primary">analytics</span>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start mb-1">
+              <h4 class="font-headline font-bold text-on-surface">Weekly Usage Report</h4>
+              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">5h ago</span>
+            </div>
+            <p class="text-sm text-on-surface-variant">Your AI productivity has increased by 14% this week. View the full breakdown.</p>
+          </div>
+          <span class="material-symbols-outlined text-on-surface-variant text-sm">chevron_right</span>
+        </div>
+        <!-- Missed Call -->
+        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-secondary/20 cursor-pointer" onclick="app.navigate('calls')">
+          <div class="bg-secondary-container/10 p-2.5 rounded-xl">
+            <span class="material-symbols-outlined text-secondary-fixed-dim">call</span>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start mb-1">
+              <h4 class="font-headline font-bold text-on-surface">Missed call from Office</h4>
+              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">Yesterday</span>
+            </div>
+            <p class="text-sm text-on-surface-variant mb-4">Twilio log: Call duration &lt; 1s. Transcribed voicemail available.</p>
+            <button class="px-4 py-1.5 border border-outline-variant/30 text-on-surface rounded-lg text-xs font-bold active:scale-95 duration-200">Listen</button>
+          </div>
+        </div>
+        <!-- Subscription Expiring -->
+        <div class="group bg-surface-container-low p-5 rounded-2xl flex items-start gap-4 transition-all border-l-4 border-error/20">
+          <div class="bg-error-container/20 p-2.5 rounded-xl">
+            <span class="material-symbols-outlined text-error">priority_high</span>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start mb-1">
+              <h4 class="font-headline font-bold text-on-surface">Subscription Expiring</h4>
+              <span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest">Yesterday</span>
+            </div>
+            <p class="text-sm text-on-surface-variant mb-4">Action required: Your creative suite subscription requires a new payment method.</p>
+            <button class="px-4 py-1.5 bg-error-container text-on-error-container rounded-lg text-xs font-bold active:scale-95 duration-200">Update Billing</button>
+          </div>
+        </div>
+      </section>
+      <!-- Footer -->
+      <div class="py-10 flex flex-col items-center justify-center opacity-30 text-center">
+        <span class="material-symbols-outlined text-4xl mb-2">auto_awesome</span>
+        <p class="font-headline font-medium text-sm">All caught up with the Ethereal Navigator</p>
+      </div>
+    </main>
+  </template>
+
+  <script>
+    const app = {
+      currentPage: null,
+      isLoggedIn: false,
+
+      init() {
+        // Check session
+        this.isLoggedIn = localStorage.getItem('ethereal_logged_in') === 'true';
+
+        if (this.isLoggedIn) {
+          this.showApp();
+        } else {
+          this.showLogin();
+        }
+
+        // Login handler
+        document.getElementById('login-btn').addEventListener('click', () => this.handleLogin());
+        document.getElementById('login-password').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') this.handleLogin();
+        });
+
+        // Nav tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.addEventListener('click', () => this.navigate(tab.dataset.page));
+        });
+
+        // Notification bell -> messages
+        document.getElementById('notif-bell').addEventListener('click', () => this.navigate('messages'));
+
+        // Profile avatar -> logout
+        document.getElementById('profile-avatar').addEventListener('click', () => {
+          if (confirm('Sign out of Ethereal AI?')) {
+            localStorage.removeItem('ethereal_logged_in');
+            this.isLoggedIn = false;
+            this.showLogin();
+          }
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+          if (e.state && e.state.page) {
+            this.renderPage(e.state.page, false);
+          }
+        });
+      },
+
+      handleLogin() {
+        const btn = document.getElementById('login-btn');
+        btn.textContent = 'Authenticating...';
+        btn.disabled = true;
+
+        setTimeout(() => {
+          localStorage.setItem('ethereal_logged_in', 'true');
+          this.isLoggedIn = true;
+          this.showApp();
+          btn.textContent = 'Login';
+          btn.disabled = false;
+        }, 800);
+      },
+
+      showLogin() {
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('login-screen').classList.add('flex');
+        document.getElementById('app-shell').classList.add('hidden');
+      },
+
+      showApp() {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('flex');
+        document.getElementById('app-shell').classList.remove('hidden');
+
+        // Route from URL hash or default to home
+        const hash = window.location.hash.replace('#/', '').replace('#', '');
+        const page = ['home', 'receipts', 'calls', 'messages'].includes(hash) ? hash : 'home';
+        this.navigate(page);
+      },
+
+      navigate(page) {
+        this.renderPage(page, true);
+      },
+
+      renderPage(page, pushState) {
+        if (this.currentPage === page) return;
+        this.currentPage = page;
+
+        // Update URL
+        if (pushState) {
+          history.pushState({ page }, '', `#/${page}`);
+        }
+
+        // Update page title in header
+        const titles = {
+          home: 'Ethereal AI',
+          receipts: 'Receipts',
+          calls: 'Ethereal AI',
+          messages: 'Ethereal AI'
+        };
+        document.getElementById('page-title').textContent = titles[page] || 'Ethereal AI';
+
+        // Update nav tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          const isActive = tab.dataset.page === page;
+          if (isActive) {
+            tab.className = 'nav-tab flex flex-col items-center justify-center bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] text-white rounded-[1.5rem] px-5 py-2 active:scale-90 duration-200 cursor-pointer';
+            tab.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+          } else {
+            tab.className = 'nav-tab flex flex-col items-center justify-center text-[#908f9d] px-5 py-2 hover:text-[#b0c6ff] transition-colors active:scale-90 duration-200 cursor-pointer';
+            tab.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
+          }
+        });
+
+        // Render page content
+        const template = document.getElementById(`page-${page}`);
+        const content = document.getElementById('app-content');
+        content.innerHTML = '';
+        content.appendChild(template.content.cloneNode(true));
+        content.classList.remove('page-enter');
+        void content.offsetWidth; // force reflow
+        content.classList.add('page-enter');
+
+        // Update FAB
+        const fabContainer = document.getElementById('fab-container');
+        if (page === 'home') {
+          fabContainer.innerHTML = `
+            <button class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] shadow-2xl shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">mic</span>
+            </button>`;
+        } else if (page === 'receipts') {
+          fabContainer.innerHTML = `
+            <button class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#b0c6ff] to-[#002c6d] shadow-2xl shadow-primary/30 flex items-center justify-center text-white active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_a_photo</span>
+            </button>`;
+        } else {
+          fabContainer.innerHTML = '';
+        }
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => app.init());
+  </script>
+</body>
+</html>
