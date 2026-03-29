@@ -293,25 +293,19 @@
       <!-- Bento Grid -->
       <section class="grid grid-cols-2 gap-4">
         <!-- Expenses Card -->
-        <div class="bg-surface-container-low rounded-[1.5rem] p-5 flex flex-col justify-between border border-outline/5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('receipts')">
+        <div id="expense-card" class="bg-surface-container-low rounded-[1.5rem] p-5 flex flex-col justify-between border border-outline/5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform" onclick="app.navigate('receipts')">
           <div class="relative z-10">
             <div class="w-10 h-10 rounded-full bg-secondary-container/10 flex items-center justify-center mb-4">
               <span class="material-symbols-outlined text-secondary-fixed-dim">receipt_long</span>
             </div>
             <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Expense Flow</span>
-            <h4 class="font-headline text-lg font-bold text-on-surface mt-1">$2,482.00</h4>
-            <p class="text-[10px] text-on-secondary-container font-medium mt-1">12 receipts scanned</p>
+            <h4 id="expense-amount" class="font-headline text-lg font-bold text-on-surface mt-1">--</h4>
+            <p id="expense-count" class="text-[10px] text-on-secondary-container font-medium mt-1">Loading...</p>
           </div>
-          <div class="mt-6 flex gap-1 items-end">
-            <div class="w-full h-8 bg-surface-container-high rounded-sm relative overflow-hidden">
-              <div class="absolute bottom-0 w-full bg-primary/40 h-[60%] rounded-t-sm"></div>
-            </div>
-            <div class="w-full h-12 bg-surface-container-high rounded-sm relative overflow-hidden">
-              <div class="absolute bottom-0 w-full bg-primary h-[85%] rounded-t-sm"></div>
-            </div>
-            <div class="w-full h-10 bg-surface-container-high rounded-sm relative overflow-hidden">
-              <div class="absolute bottom-0 w-full bg-primary/60 h-[40%] rounded-t-sm"></div>
-            </div>
+          <div id="expense-bars" class="mt-6 flex gap-1 items-end">
+            <div class="w-full h-10 bg-surface-container-high rounded-sm animate-pulse"></div>
+            <div class="w-full h-10 bg-surface-container-high rounded-sm animate-pulse"></div>
+            <div class="w-full h-10 bg-surface-container-high rounded-sm animate-pulse"></div>
           </div>
         </div>
         <!-- Retell AI Calls Card -->
@@ -640,11 +634,12 @@
 
       async loadHome() {
         // Load all feeds for dashboard summary
-        const [twilioMsg, twilioCalls, retell, gmail] = await Promise.all([
+        const [twilioMsg, twilioCalls, retell, gmail, receiptsData] = await Promise.all([
           api.fetch('twilio-messages'),
           api.fetch('twilio-calls'),
           api.fetch('retell-calls'),
           api.fetch('gmail-messages'),
+          api.fetch('receipts'),
         ]);
 
         // Update pending approvals count from Gmail
@@ -714,14 +709,46 @@
             </div>`;
         }
 
-        // Update expense summary from Twilio
-        const expenseEl = document.getElementById('expense-summary');
-        if (expenseEl && twilioMsg?.messages) {
-          const total = twilioMsg.messages.reduce((sum, m) => {
-            const price = parseFloat(m.price) || 0;
-            return sum + Math.abs(price);
-          }, 0);
-          // We don't have real receipt data, keep the static expense display
+        // Update expense card from receipts data
+        const receipts = receiptsData?.receipts || [];
+        const expenseAmountEl = document.getElementById('expense-amount');
+        const expenseCountEl = document.getElementById('expense-count');
+        const expenseBarsEl = document.getElementById('expense-bars');
+
+        if (expenseAmountEl) {
+          if (receipts.length === 0) {
+            expenseAmountEl.textContent = 'No receipts';
+            expenseCountEl.textContent = 'Text a photo to add';
+          } else {
+            expenseAmountEl.textContent = `${receipts.length} receipt${receipts.length !== 1 ? 's' : ''}`;
+            const imgCount = receipts.reduce((sum, r) => sum + (r.numMedia || 0), 0);
+            expenseCountEl.textContent = `${imgCount} image${imgCount !== 1 ? 's' : ''} captured`;
+          }
+        }
+
+        // Build activity bars from receipts by day (last 7 days)
+        if (expenseBarsEl) {
+          const now = Date.now();
+          const dayMs = 86400000;
+          const days = Array.from({ length: 7 }, (_, i) => {
+            const dayStart = now - (6 - i) * dayMs;
+            return receipts.filter(r => {
+              const t = new Date(r.dateSent).getTime();
+              return t >= dayStart - dayMs && t < dayStart;
+            }).length;
+          });
+          const maxCount = Math.max(...days, 1);
+
+          expenseBarsEl.innerHTML = days.map((count, i) => {
+            const pct = Math.max(count / maxCount * 100, 5);
+            const isToday = i === 6;
+            const opacity = isToday ? '' : (count > 0 ? 'bg-primary/60' : 'bg-primary/20');
+            return `
+              <div class="w-full h-12 bg-surface-container-high rounded-sm relative overflow-hidden">
+                <div class="absolute bottom-0 w-full ${isToday ? 'bg-primary shadow-[0_-4px_12px_rgba(176,198,255,0.3)]' : opacity} rounded-t-sm" style="height:${pct}%"></div>
+                ${isToday ? '<div class="absolute -top-5 left-1/2 -translate-x-1/2 text-[8px] font-bold text-primary whitespace-nowrap">Today</div>' : ''}
+              </div>`;
+          }).join('');
         }
 
         // AI Briefing with real data
